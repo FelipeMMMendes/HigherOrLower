@@ -1,6 +1,7 @@
 from data import data as df
 from art import logo,vs
 from random import randint
+import os
 
 #temos 50 registros em nossos dados
 #we have 50 registers in our data
@@ -29,6 +30,10 @@ choice2 = df[index2]
 #list to keep the positions that have already been picked
 chosenAlready = []
 
+#variavel flag para guardar a pontuacao do jogador
+#flag variable to keep track of the player's score
+score = 0
+
 #variavel flag para repeticao do jogo
 #flag variable to the repetition of the game
 gameIsOn = True
@@ -53,12 +58,17 @@ while gameIsOn:
 
     #se a funcao checkValue retornar true (significa que a opcao1 eh maior que a 2) 
     #e o jogador escolheu A, ele passou.
+    #os.system('cls') serve para limpar o terminal
+
 
     #if the checkValue function returns true (it means that option1 is bigger than option 2) 
     #and the player has chosen A, meaning he pass to the next round.
     if checkValue(choice1,choice2)==True and playerChoice == 'a':
+        os.system('cls')
         print(f"You're right! {choice1['name']} has over {choice1['follower_count']} million followers")
         print(f"While {choice2['name']} has over {choice2['follower_count']} million followers")
+        score += 1
+        print(f"Current Score: {score}")
 
         #adiciona o numero do primeiro para o chosenAlready e faz com que a opcao2 receba outro tema
         #add the number of the first to the chosenAlready and make the second option recieve another data
@@ -66,25 +76,41 @@ while gameIsOn:
         choice1 = choice2
         index2 = randint(0,49)
         choice2 = df[index2]
-
+        #tratamento caso algum numero se repita
+        #treatment if any number repeats itself
+        if chosenAlready.count(index2) != 0:
+            index2 = randint(0,49)
+            choice2 = df[index2]       
+        
     #mesma logica de antes, só que agora esse laço condicional vai ser ativado caso a opção 2 seja a maior
     #e o jogador tenha acertado
 
     #same logic as before, but now in this case it's for when the option 2 is bigger than 1 and the player
     #got that right.
     elif checkValue(choice1,choice2)==False and playerChoice == 'b':
+        os.system('cls')
         print(f"You're right! {choice2['name']} has over {choice2['follower_count']} million followers")
         print(f"While {choice1['name']} has over {choice1['follower_count']} million followers")
+        score += 1
+        print(f"Current Score: {score}")
+
+        #tratamento caso algum numero se repita
+        #treatment if any number repeats itself
         chosenAlready.append(index1)
         choice1 = choice2
         index2 = randint(0,49)
         choice2 = df[index2]
-
+        if chosenAlready.count(index2) != 0:
+            index2 = randint(0,49)
+            choice2 = df[index2]
+        
     #caso o jogador tenha errado
     #if the player had got it wrong.
     else:
+        os.system('cls')
         print(f"You're wrong! {choice1['name']} has over {choice1['follower_count']} million followers")
         print(f"While {choice2['name']} has over {choice2['follower_count']} million followers")
+        print(f"Total Score: {score}")
         gameIsOn = False
 
 
